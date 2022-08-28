@@ -1,24 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import {createContext, useState} from "react"
+import Menu from "./component/Menu";
+import Quiz from "./component/Quiz";
+import Score from "./component/Score";
+
+import './App.css'
+
+//สร้าง Context ขึ้นมาเพื่อให้เปลี่ยนแปลงค่าใน Stateได้ menu>quiz>score
+export const DataContext = createContext()
 
 function App() {
+  //สร้าง state ขึ้นเพื่อจะให้แสดง Component ที่เราสร้างแยกไว้แต่ละอัน แต่เราจะแสดงทีละหน้า
+  const [appState,setAppState] = useState("menu")
+  //สร้าง State เพื่อทำระบบคะแนน และนำไปเรียกใช้งานใน QuizComponent
+  const [score,setScore] = useState(0)
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    //สร้าง DataContext เพื่อที่จะเอา State เข้าไปทำงานใน Componentย่อย ได้เราออยากเอา state ตัวไหนไปใช้ก็ต้องเพิ่มคำลงไปด้วย
+    <DataContext.Provider value={{appState,setAppState,score,setScore}}> 
+      <div className="App">
+        <h1>Web Develorment Quiz</h1>
+        {appState === "menu" && <Menu/>}
+        {appState === "quiz" && <Quiz/>}
+        {appState === "score" && <Score/>}
+      </div>
+    </DataContext.Provider>
   );
 }
 
